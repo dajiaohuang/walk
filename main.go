@@ -29,6 +29,10 @@ import (
 
 var Version = "v1.13.0"
 
+func isFlagAt(args []string, index int, long, short string) bool {
+	return index >= 0 && index < len(args) && (args[index] == long || args[index] == short)
+}
+
 const separator = "    " // Separator between columns.
 
 var (
@@ -73,11 +77,11 @@ func main() {
 
 	argsWithoutFlags := make([]string, 0)
 	for i := 1; i < len(os.Args); i++ {
-		if os.Args[i] == "--help" || os.Args[1] == "-h" {
+		if isFlagAt(os.Args, i, "--help", "-h") {
 			usage(os.Stderr, true)
 			os.Exit(1)
 		}
-		if os.Args[i] == "--version" || os.Args[1] == "-v" {
+		if isFlagAt(os.Args, i, "--version", "-v") {
 			fmt.Printf("%s\n", Version)
 			os.Exit(0)
 		}
